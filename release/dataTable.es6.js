@@ -1631,6 +1631,379 @@ function NextSortDirection(sortType, currentSort) {
   }
 }
 
+class TotalCellController{
+  /**
+   * Calculates the styles for the total cell directive
+   * @return {styles}
+   */
+  styles(){
+    return {
+      width: this.column.width  + 'px',
+      minWidth: this.column.minWidth  + 'px',
+      maxWidth: this.column.maxWidth  + 'px',
+      height: this.column.height  + 'px'
+    };
+  }
+
+  /**
+   * Calculates the css classes for the total cell directive
+   */
+  cellClass(){
+    var cls = {
+      'sortable': this.column.sortable,
+      'resizable': this.column.resizable
+    };
+
+    if(this.column.totalClassName){
+      cls[this.column.totalClassName] = true;
+    }
+
+    return cls;
+  }
+
+  /**
+   * Toggles the sorting on the column
+   */
+  onSorted(){
+    if(this.column.sortable){
+      this.column.sort = NextSortDirection(this.sortType, this.column.sort);
+
+      if (this.column.sort === undefined){
+        this.column.sortPriority = undefined;
+      }
+
+      this.onSort({
+        column: this.column
+      });
+    }
+  }
+
+  /**
+   * Toggles the css class for the sort button
+   */
+  sortClass(){
+    return {
+      'sort-btn': true,
+      'sort-asc icon-down': this.column.sort === 'asc',
+      'sort-desc icon-up': this.column.sort === 'desc'
+    };
+  }
+
+  /**
+   * Updates the column width on resize
+   * @param  {width}
+   * @param  {column}
+   */
+  onResized(width, column){
+    this.onResize({
+      column: column,
+      width: width
+    });
+  }
+
+}
+
+function TotalCellDirective($compile){
+  return {
+    restrict: 'E',
+    controller: TotalCellController,
+    controllerAs: 'tcell',
+    scope: true,
+    bindToController: {
+      options: '=',
+      column: '=',
+      onCheckboxChange: '&',
+      onSort: '&',
+      sortType: '=',
+      onResize: '&',
+      selected: '=',
+    },
+    replace: true,
+    template:
+      `<div ng-class="tcell.cellClass()"
+            class="dt-total-cell"
+            draggable="true"
+            data-id="{{column.$id}}"
+            ng-style="tcell.styles()"
+            title="{{::tcell.column.total}}">
+        <div resizable="tcell.column.resizable"
+             on-resize="tcell.onResized(width, tcell.column)"
+             min-width="tcell.column.minWidth"
+             max-width="tcell.column.maxWidth">
+          <span class="dt-total-cell-label">
+          </span>
+        </div>
+      </div>`,
+    compile: function() {
+      return {
+        pre: function($scope, $elm, $attrs, ctrl) {
+          let label = $elm[0].querySelector('.dt-total-cell-label'), cellScope;
+
+          if(ctrl.column.totalRenderer){
+            cellScope = ctrl.options.$outer.$new(false);
+
+            // copy some props
+            cellScope.$total = ctrl.column.total;
+            cellScope.$index = $scope.$index;
+          }
+
+          if(ctrl.column.totalRenderer){
+            let elm = angular.element(ctrl.column.totalRenderer($elm));
+            angular.element(label).append($compile(elm)(cellScope)[0]);
+          } else {
+            let val = ctrl.column.total;
+            if(val === undefined || val === null) val = '';
+            label.textContent = val;
+          }
+        }
+      }
+    }
+  };
+}
+
+class TotalController {
+
+  /**
+   * Returns the styles for the total directive.
+   * @param  {object} scope
+   * @return {object} styles
+   */
+  styles() {
+    return {
+      width: this.options.internal.innerWidth + 'px',
+      height: this.options.totalHeight + 'px'
+    }
+  }
+
+  /**
+   * Returns the inner styles for the total directive
+   * @param  {object} scope
+   * @return {object} styles
+   */
+  innerStyles(){
+    return {
+      width: this.columnWidths.total + 'px'
+    };
+  }
+
+  /**
+   * Invoked when a column sort direction has changed
+   * @param  {object} scope
+   * @param  {object} column
+   */
+  onSorted(sortedColumn){
+    if (this.options.sortType === 'single') {
+      // if sort type is single, then only one column can be sorted at once,
+      // so we set the sort to undefined for the other columns
+      function unsortColumn(column) {
+        if (column !== sortedColumn) {
+          column.sort = undefined;
+        }
+      }
+
+      this.columns.left.forEach(unsortColumn);
+      this.columns.center.forEach(unsortColumn);
+      this.columns.right.forEach(unsortColumn);
+    }
+
+    this.onSort({
+      column: sortedColumn
+    });
+  }
+
+  /**
+   * Returns the styles by group for the totals.
+   * @param  {scope}
+   * @param  {group}
+   * @return {styles object}
+   */
+  stylesByGroup(group){
+    var styles = {
+      width: this.columnWidths[group] + 'px'
+    };
+
+    if(group === 'center'){
+      TranslateXY(styles, this.options.internal.offsetX * -1, 0);
+    } else if(group === 'right'){
+      var offset = (this.columnWidths.total - this.options.internal.innerWidth) *-1;
+      TranslateXY(styles, offset, 0);
+    }
+
+    return styles;
+  }
+
+  /**
+   * Occurs when a total cell directive triggered a resize
+   * @param  {object} scope
+   * @param  {object} column
+   * @param  {int} width
+   */
+  onResized(column, width){
+    this.onResize({
+      column: column,
+      width: width
+    });
+  }
+
+}
+
+function TotalDirective($timeout){
+  return {
+    restrict: 'E',
+    controller: TotalController,
+    controllerAs: 'total',
+    scope: true,
+    bindToController: {
+      options: '=',
+      columns: '=',
+      columnWidths: '=',
+      onSort: '&',
+      onResize: '&',
+      onCheckboxChange: '&'
+    },
+    template: `
+      <div class="dt-total" ng-style="total.styles()">
+
+        <div class="dt-total-inner" ng-style="total.innerStyles()">
+          <div class="dt-row-left"
+               ng-style="total.stylesByGroup('left')"
+               ng-if="total.columns['left'].length"
+               sortable="total.options.reorderable"
+               on-sortable-sort="columnsResorted(event, columnId)">
+            <dt-total-cell
+              ng-repeat="column in total.columns['left'] track by column.$id"
+              on-checkbox-change="total.onCheckboxChanged()"
+              on-sort="total.onSorted(column)"
+              options="total.options"
+              sort-type="total.options.sortType"
+              on-resize="total.onResized(column, width)"
+              selected="total.isSelected()"
+              column="column">
+            </dt-total-cell>
+          </div>
+          <div class="dt-row-center"
+               sortable="total.options.reorderable"
+               ng-style="total.stylesByGroup('center')"
+               on-sortable-sort="columnsResorted(event, columnId)">
+            <dt-total-cell
+              ng-repeat="column in total.columns['center'] track by column.$id"
+              on-checkbox-change="total.onCheckboxChanged()"
+              on-sort="total.onSorted(column)"
+              sort-type="total.options.sortType"
+              selected="total.isSelected()"
+              on-resize="total.onResized(column, width)"
+              options="total.options"
+              column="column">
+            </dt-total-cell>
+          </div>
+          <div class="dt-row-right"
+               ng-if="total.columns['right'].length"
+               sortable="total.options.reorderable"
+               ng-style="total.stylesByGroup('right')"
+               on-sortable-sort="columnsResorted(event, columnId)">
+            <dt-total-cell
+              ng-repeat="column in total.columns['right'] track by column.$id"
+              on-sort="total.onSorted(column)"
+              sort-type="total.options.sortType"
+              selected="total.isSelected()"
+              on-resize="total.onResized(column, width)"
+              options="total.options"
+              column="column">
+            </dt-total-cell>
+          </div>
+        </div>
+        <div class="dt-total-inner" ng-style="total.innerStyles()">
+          <div class="dt-row-left"
+               ng-style="total.stylesByGroup('left')"
+               ng-if="total.columns['left'].length"
+               sortable="total.options.reorderable"
+               on-sortable-sort="columnsResorted(event, columnId)">
+            <dt-total-cell
+              ng-repeat="column in total.columns['left'] track by column.$id"
+              on-sort="total.onSorted(column)"
+              options="total.options"
+              sort-type="total.options.sortType"
+              on-resize="total.onResized(column, width)"
+              selected="total.isSelected()"
+              column="column">
+            </dt-total-cell>
+          </div>
+          <div class="dt-row-center"
+               sortable="total.options.reorderable"
+               ng-style="total.stylesByGroup('center')"
+               on-sortable-sort="columnsResorted(event, columnId)">
+            <dt-total-cell
+              ng-repeat="column in total.columns['center'] track by column.$id"
+              on-sort="total.onSorted(column)"
+              sort-type="total.options.sortType"
+              selected="total.isSelected()"
+              on-resize="total.onResized(column, width)"
+              options="total.options"
+              column="column">
+            </dt-total-cell>
+          </div>
+          <div class="dt-row-right"
+               ng-if="total.columns['right'].length"
+               sortable="total.options.reorderable"
+               ng-style="total.stylesByGroup('right')"
+               on-sortable-sort="columnsResorted(event, columnId)">
+            <dt-total-cell
+              ng-repeat="column in total.columns['right'] track by column.$id"
+              on-sort="total.onSorted(column)"
+              sort-type="total.options.sortType"
+              selected="total.isSelected()"
+              on-resize="total.onResized(column, width)"
+              options="total.options"
+              column="column">
+            </dt-total-cell>
+          </div>
+        </div>
+      </div>`,
+    replace:true,
+    link: function($scope, $elm, $attrs, ctrl){
+
+      $scope.columnsResorted = function(event, columnId){
+        var col = findColumnById(columnId),
+            parent = angular.element(event.currentTarget),
+            newIdx = -1;
+
+        angular.forEach(parent.children(), (c, i) => {
+          if (columnId === angular.element(c).attr('data-id')) {
+            newIdx = i;
+          }
+        });
+
+        $timeout(() => {
+          angular.forEach(ctrl.columns, (group) => {
+            var idx = group.indexOf(col);
+            if(idx > -1){
+
+              // this is tricky because we want to update the index
+              // in the orig columns array instead of the grouped one
+              var curColAtIdx = group[newIdx],
+                  siblingIdx = ctrl.options.columns.indexOf(curColAtIdx),
+                  curIdx = ctrl.options.columns.indexOf(col);
+
+              ctrl.options.columns.splice(curIdx, 1);
+              ctrl.options.columns.splice(siblingIdx, 0, col);
+
+              return false;
+            }
+          });
+
+        });
+      }
+
+      var findColumnById = function(columnId){
+        var columns = ctrl.columns.left.concat(ctrl.columns.center).concat(ctrl.columns.right)
+        return columns.find(function(c){
+          return c.$id === columnId;
+        })
+      }
+    }
+  };
+}
+
 class HeaderCellController{
   /**
    * Calculates the styles for the header cell directive
@@ -2553,7 +2926,9 @@ const ColumnDefaults = {
   headerCheckbox: false,
 
   // Whether the column can automatically resize to fill space in the table.
-  canAutoResize: true
+  canAutoResize: true,
+
+  totalHeight: 0,
 
 };
 
@@ -2985,6 +3360,14 @@ function DataTableDirective($window, $timeout, $parse){
                    on-page="dt.onBodyPage(offset, size)"
                    on-tree-toggle="dt.onTreeToggled(row, cell)">
            </dt-body>
+          <dt-total options="dt.options"
+                     columns="dt.columnsByPin"
+                     column-widths="dt.columnWidths"
+                     ng-if="dt.options.totalHeight"
+                     on-resize="dt.onResized(column, width)"
+                     selected="dt.isAllRowsSelected()"
+                     on-sort="dt.onSorted()">
+          </dt-total>
           <dt-footer ng-if="dt.options.footerHeight"
                      ng-style="{ height: dt.options.footerHeight + 'px' }"
                      on-page="dt.onFooterPage(offset, size)"
@@ -3071,6 +3454,8 @@ var dataTable = angular
   .directive('sortable', SortableDirective)
   .directive('dtHeader', HeaderDirective)
   .directive('dtHeaderCell', HeaderCellDirective)
+  .directive('dtTotal', TotalDirective)
+  .directive('dtTotalCell', TotalCellDirective)
   .directive('dtBody', BodyDirective)
   .directive('dtScroller', ScrollerDirective)
   .directive('dtSeletion', SelectionDirective)

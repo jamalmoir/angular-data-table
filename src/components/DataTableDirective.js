@@ -53,6 +53,14 @@ export function DataTableDirective($window, $timeout, $parse){
                    on-page="dt.onBodyPage(offset, size)"
                    on-tree-toggle="dt.onTreeToggled(row, cell)">
            </dt-body>
+          <dt-total options="dt.options"
+                     columns="dt.columnsByPin"
+                     column-widths="dt.columnWidths"
+                     ng-if="dt.options.totalHeight"
+                     on-resize="dt.onResized(column, width)"
+                     selected="dt.isAllRowsSelected()"
+                     on-sort="dt.onSorted()">
+          </dt-total>
           <dt-footer ng-if="dt.options.footerHeight"
                      ng-style="{ height: dt.options.footerHeight + 'px' }"
                      on-page="dt.onFooterPage(offset, size)"

@@ -143,6 +143,8 @@ export const ColumnDefaults = {
   headerCheckbox: false,
 
   // Whether the column can automatically resize to fill space in the table.
-  canAutoResize: true
+  canAutoResize: true,
+
+  totalHeight: 0,
 
 };

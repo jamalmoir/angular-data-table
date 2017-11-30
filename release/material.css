@@ -16,20 +16,29 @@
   background-color: #304FFE;
   color: #FFF;
 }
-.dt.material .dt-header {
+.dt.material .dt-header,
+.dt.material .dt-total {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
-.dt.material .dt-header .dt-header-cell {
+.dt.material .dt-header .dt-header-cell,
+.dt.material .dt-total .dt-header-cell,
+.dt.material .dt-header .dt-total-cell,
+.dt.material .dt-total .dt-total-cell {
   text-align: left;
   padding: .5rem 1.2rem;
   font-weight: 400;
   color: #757575;
   vertical-align: bottom;
 }
-.dt.material .dt-header .dt-resize-handle {
+.dt.material .dt-header .dt-resize-handle,
+.dt.material .dt-total .dt-resize-handle {
   border-right: solid 1px #eee;
 }
+.dt.material .dt-total {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
 .dt.material .dt-header .dt-row-left,
+.dt.material .dt-total .dt-row-left,
 .dt.material .dt-body .dt-row-left {
   background-color: #FFF;
   background-position: 100% 0;
@@ -37,6 +46,7 @@
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAABCAYAAAD5PA/NAAAAFklEQVQIHWPSkNeSBmJhTQVtbiDNCgASagIIuJX8OgAAAABJRU5ErkJggg==);
 }
 .dt.material .dt-header .dt-row-right,
+.dt.material .dt-total .dt-row-right,
 .dt.material .dt-body .dt-row-right {
   background-position: 0 0;
   background-color: #fff;

@@ -21,6 +21,7 @@
   visibility: hidden;
 }
 .dt .dt-cell,
+.dt .dt-total-cell,
 .dt .dt-header-cell {
   vertical-align: top;
   overflow: hidden;
@@ -35,6 +36,7 @@
   user-select: none;
 }
 .dt .dt-row,
+.dt .dt-total-inner,
 .dt .dt-header-inner {
   display: -webkit-box;
   display: -moz-box;
@@ -57,34 +59,63 @@
 .dt .dt-row-right {
   position: relative;
 }
-.dt .dt-header {
+.dt .dt-header,
+.dt .dt-total {
   overflow: hidden;
 }
-.dt .dt-header .dt-header-inner {
+.dt .dt-header .dt-header-inner,
+.dt .dt-total .dt-header-inner,
+.dt .dt-header .dt-total-inner,
+.dt .dt-total .dt-total-inner {
   white-space: nowrap;
   align-items: stretch;
   -webkit-align-items: stretch;
 }
-.dt .dt-header .dt-header-cell {
+.dt .dt-header .dt-header-cell,
+.dt .dt-total .dt-header-cell,
+.dt .dt-header .dt-total-cell,
+.dt .dt-total .dt-total-cell {
   position: relative;
   white-space: nowrap;
   display: inline-block;
 }
-.dt .dt-header .dt-header-cell.dt-drag-over {
+.dt .dt-header .dt-header-cell.dt-drag-over,
+.dt .dt-total .dt-header-cell.dt-drag-over,
+.dt .dt-header .dt-total-cell.dt-drag-over,
+.dt .dt-total .dt-total-cell.dt-drag-over {
   background: #EEE;
 }
-.dt .dt-header .dt-header-cell.sortable .dt-header-cell-label {
+.dt .dt-header .dt-header-cell.sortable .dt-header-cell-label,
+.dt .dt-total .dt-header-cell.sortable .dt-header-cell-label,
+.dt .dt-header .dt-total-cell.sortable .dt-header-cell-label,
+.dt .dt-total .dt-total-cell.sortable .dt-header-cell-label,
+.dt .dt-header .dt-header-cell.sortable .dt-total-cell-label,
+.dt .dt-total .dt-header-cell.sortable .dt-total-cell-label,
+.dt .dt-header .dt-total-cell.sortable .dt-total-cell-label,
+.dt .dt-total .dt-total-cell.sortable .dt-total-cell-label {
   cursor: pointer;
 }
-.dt .dt-header .dt-header-cell .sort-btn {
+.dt .dt-header .dt-header-cell .sort-btn,
+.dt .dt-total .dt-header-cell .sort-btn,
+.dt .dt-header .dt-total-cell .sort-btn,
+.dt .dt-total .dt-total-cell .sort-btn {
   visibility: hidden;
   display: inline-block;
 }
 .dt .dt-header .dt-header-cell .sort-btn.sort-desc,
-.dt .dt-header .dt-header-cell .sort-btn.sort-asc {
+.dt .dt-total .dt-header-cell .sort-btn.sort-desc,
+.dt .dt-header .dt-total-cell .sort-btn.sort-desc,
+.dt .dt-total .dt-total-cell .sort-btn.sort-desc,
+.dt .dt-header .dt-header-cell .sort-btn.sort-asc,
+.dt .dt-total .dt-header-cell .sort-btn.sort-asc,
+.dt .dt-header .dt-total-cell .sort-btn.sort-asc,
+.dt .dt-total .dt-total-cell .sort-btn.sort-asc {
   visibility: visible;
 }
-.dt .dt-header .dt-header-cell .dt-resize-handle {
+.dt .dt-header .dt-header-cell .dt-resize-handle,
+.dt .dt-total .dt-header-cell .dt-resize-handle,
+.dt .dt-header .dt-total-cell .dt-resize-handle,
+.dt .dt-total .dt-total-cell .dt-resize-handle {
   display: inline-block;
   position: absolute;
   right: 0;
@@ -95,10 +126,16 @@
   visibility: hidden;
   cursor: ew-resize;
 }
-.dt .dt-header .dt-header-cell.resizable:hover .dt-resize-handle {
+.dt .dt-header .dt-header-cell.resizable:hover .dt-resize-handle,
+.dt .dt-total .dt-header-cell.resizable:hover .dt-resize-handle,
+.dt .dt-header .dt-total-cell.resizable:hover .dt-resize-handle,
+.dt .dt-total .dt-total-cell.resizable:hover .dt-resize-handle {
   visibility: visible;
 }
-.dt .dt-header .dt-header-cell:last-child .dt-resize-handle {
+.dt .dt-header .dt-header-cell:last-child .dt-resize-handle,
+.dt .dt-total .dt-header-cell:last-child .dt-resize-handle,
+.dt .dt-header .dt-total-cell:last-child .dt-resize-handle,
+.dt .dt-total .dt-total-cell:last-child .dt-resize-handle {
   visibility: hidden !important;
 }
 .dt .dt-body {
