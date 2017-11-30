@@ -147,4 +147,5 @@ export const ColumnDefaults = {
 
   totalHeight: 0,
 
+  totalRenderer: undefined,
 };

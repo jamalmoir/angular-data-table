@@ -2287,8 +2287,9 @@
 
     canAutoResize: true,
 
-    totalHeight: 0
+    totalHeight: 0,
 
+    totalRenderer: undefined
   };
 
   var TableDefaults = {
