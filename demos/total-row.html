@@ -57,15 +57,14 @@
           $scope.options = {
             rowHeight: 50,
             headerHeight: 50,
-            totalHeight: 50,
+            pinnedHeight: 50,
             footerHeight: false,
             scrollbarV: false,
             selectable: false,
-            totalRow: true,
             columns: [
-              { name: "Name", width: 300, total:100 },
-              { name: "Gender", total: 100},
-              { name: "Company", total: 100}
+              { name: "Name", width: 300, pinnedRowRenderer: function() {return '<span>{{100}}</span>'} },
+              { name: "Gender", pinnedRowRenderer: function() {return '<span>{{100}}</span>'}},
+              { name: "Company", pinnedRowRenderer: function() {return '<span>{{100}}</span>'}}
             ]
           };
           

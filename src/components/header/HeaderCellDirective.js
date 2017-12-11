@@ -14,7 +14,8 @@ export function HeaderCellDirective($compile){
       onSort: '&',
       sortType: '=',
       onResize: '&',
-      selected: '='
+      selected: '=',
+      isPinnedRow: '='
     },
     replace: true,
     template:
@@ -44,7 +45,7 @@ export function HeaderCellDirective($compile){
         pre: function($scope, $elm, $attrs, ctrl) {
           let label = $elm[0].querySelector('.dt-header-cell-label'), cellScope;
 
-          if(ctrl.column.headerTemplate || ctrl.column.headerRenderer){
+          if(ctrl.column.headerTemplate || ctrl.column.headerRenderer || ctrl.isPinnedRow){
             cellScope = ctrl.options.$outer.$new(false);
 
             // copy some props
@@ -52,7 +53,10 @@ export function HeaderCellDirective($compile){
             cellScope.$index = $scope.$index;
           }
 
-          if(ctrl.column.headerTemplate){
+          if(ctrl.isPinnedRow && ctrl.column.pinnedRowRenderer){
+            let elm = angular.element(ctrl.column.pinnedRowRenderer($elm));
+            angular.element(label).append($compile(elm)(cellScope)[0]);
+          } else if(ctrl.column.headerTemplate){
             let elm = angular.element(`<span>${ctrl.column.headerTemplate.trim()}</span>`);
             angular.element(label).append($compile(elm)(cellScope));
           } else if(ctrl.column.headerRenderer){

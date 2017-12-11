@@ -145,7 +145,7 @@ export const ColumnDefaults = {
   // Whether the column can automatically resize to fill space in the table.
   canAutoResize: true,
 
-  totalHeight: 0,
+  pinnedHeight: 0,
 
-  totalRenderer: undefined,
+  pinnedRowRenderer: undefined,
 };

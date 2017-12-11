@@ -39,7 +39,8 @@ export function DataTableDirective($window, $timeout, $parse){
                      ng-if="dt.options.headerHeight"
                      on-resize="dt.onResized(column, width)"
                      selected="dt.isAllRowsSelected()"
-                     on-sort="dt.onSorted()">
+                     on-sort="dt.onSorted()"
+                     is-pinned-row="false">
           </dt-header>
           <dt-body rows="dt.rows"
                    selected="dt.selected"
@@ -52,15 +53,17 @@ export function DataTableDirective($window, $timeout, $parse){
                    options="dt.options"
                    on-page="dt.onBodyPage(offset, size)"
                    on-tree-toggle="dt.onTreeToggled(row, cell)">
-           </dt-body>
-          <dt-total options="dt.options"
+          </dt-body>
+          <dt-header options="dt.options"
+                     on-checkbox-change="dt.onHeaderCheckboxChange()"
                      columns="dt.columnsByPin"
                      column-widths="dt.columnWidths"
-                     ng-if="dt.options.totalHeight"
+                     ng-if="dt.options.headerHeight"
                      on-resize="dt.onResized(column, width)"
                      selected="dt.isAllRowsSelected()"
-                     on-sort="dt.onSorted()">
-          </dt-total>
+                     on-sort="dt.onSorted()"
+                     is-pinned-row="true">
+          </dt-header>
           <dt-footer ng-if="dt.options.footerHeight"
                      ng-style="{ height: dt.options.footerHeight + 'px' }"
                      on-page="dt.onFooterPage(offset, size)"

@@ -13,7 +13,8 @@ export function HeaderDirective($timeout){
       columnWidths: '=',
       onSort: '&',
       onResize: '&',
-      onCheckboxChange: '&'
+      onCheckboxChange: '&',
+      isPinnedRow: '='
     },
     template: `
       <div class="dt-header" ng-style="header.styles()">
@@ -32,7 +33,8 @@ export function HeaderDirective($timeout){
               sort-type="header.options.sortType"
               on-resize="header.onResized(column, width)"
               selected="header.isSelected()"
-              column="column">
+              column="column"
+              is-pinned-row="header.isPinnedRow">
             </dt-header-cell>
           </div>
           <div class="dt-row-center"
@@ -47,7 +49,8 @@ export function HeaderDirective($timeout){
               selected="header.isSelected()"
               on-resize="header.onResized(column, width)"
               options="header.options"
-              column="column">
+              column="column"
+              is-pinned-row="header.isPinnedRow">
             </dt-header-cell>
           </div>
           <div class="dt-row-right"
@@ -63,7 +66,8 @@ export function HeaderDirective($timeout){
               selected="header.isSelected()"
               on-resize="header.onResized(column, width)"
               options="header.options"
-              column="column">
+              column="column"
+              is-pinned-row="header.isPinnedRow">
             </dt-header-cell>
           </div>
         </div>
