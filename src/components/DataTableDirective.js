@@ -54,19 +54,18 @@ export function DataTableDirective($window, $timeout, $parse){
                    on-page="dt.onBodyPage(offset, size)"
                    on-tree-toggle="dt.onTreeToggled(row, cell)">
           </dt-body>
-          <dt-header options="dt.options"
-                     on-checkbox-change="dt.onHeaderCheckboxChange()"
+          <dt-header class="dt-pinned-row"
+                     options="dt.options"
                      columns="dt.columnsByPin"
                      column-widths="dt.columnWidths"
-                     ng-if="dt.options.headerHeight"
+                     ng-if="dt.options.pinnedRowHeight"
                      on-resize="dt.onResized(column, width)"
-                     selected="dt.isAllRowsSelected()"
-                     on-sort="dt.onSorted()"
                      is-pinned-row="true">
           </dt-header>
           <dt-footer ng-if="dt.options.footerHeight"
                      ng-style="{ height: dt.options.footerHeight + 'px' }"
                      on-page="dt.onFooterPage(offset, size)"
+                     on-sort="function() {return null}"
                      paging="dt.options.paging">
            </dt-footer>
         </div>`
@@ -106,7 +105,7 @@ export function DataTableDirective($window, $timeout, $parse){
                 height = height - ctrl.options.footerHeight;
               }
 
-              if (ctrl.options.totalHeight) {
+              if (ctrl.options.pinnedRowHeight) {
                 height = height - ctrl.options.footerHeight;
               }
 

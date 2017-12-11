@@ -15,9 +15,6 @@ import { GroupRowDirective } from './components/body/GroupRowDirective';
 import { CellDirective } from './components/body/CellDirective';
 import { FooterDirective } from './components/footer/FooterDirective';
 import { PagerDirective } from './components/footer/PagerDirective';
-import { TotalDirective } from './components/total/TotalDirective';
-import { TotalCellController } from './components/total/TotalCellController';
-import { TotalCellDirective } from './components/total/TotalCellDirective';
 
 export default angular
   .module('data-table', [])
@@ -26,8 +23,6 @@ export default angular
   .directive('sortable', SortableDirective)
   .directive('dtHeader', HeaderDirective)
   .directive('dtHeaderCell', HeaderCellDirective)
-  .directive('dtTotal', TotalDirective)
-  .directive('dtTotalCell', TotalCellDirective)
   .directive('dtBody', BodyDirective)
   .directive('dtScroller', ScrollerDirective)
   .directive('dtSeletion', SelectionDirective)

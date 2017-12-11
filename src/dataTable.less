@@ -25,7 +25,6 @@
   }
 
   .dt-cell,
-  .dt-total-cell,
   .dt-header-cell{
     vertical-align: top;
     overflow: hidden;
@@ -44,7 +43,6 @@
   }
 
   .dt-row,
-  .dt-total-inner,
   .dt-header-inner{
     display: -webkit-box;
     display: -moz-box;
@@ -72,16 +70,16 @@
     position:relative;
   }
 
-	.dt-header, .dt-total{
+	.dt-header{
     overflow:hidden;
 
-    .dt-header-inner, .dt-total-inner{
+    .dt-header-inner{
       white-space: nowrap;
       align-items: stretch;
       -webkit-align-items: stretch;
     }
 
-    .dt-header-cell, .dt-total-cell{
+    .dt-header-cell{
       position:relative;
       white-space: nowrap;
       display:inline-block;
@@ -91,7 +89,7 @@
       }
 
       &.sortable{
-        .dt-header-cell-label, .dt-total-cell-label{
+        .dt-header-cell-label{
           cursor: pointer;
         }
       }
@@ -197,4 +195,3 @@
     }
   }
 }
-

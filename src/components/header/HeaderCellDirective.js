@@ -37,7 +37,7 @@ export function HeaderCellDirective($compile){
           <span class="dt-header-cell-label"
                 ng-click="hcell.onSorted()">
           </span>
-          <span ng-class="hcell.sortClass()"></span>
+          <span ng-hide="hcell.isPinnedRow" ng-class="hcell.sortClass()"></span>
         </div>
       </div>`,
     compile: function() {
