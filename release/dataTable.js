@@ -2643,6 +2643,10 @@
                   height = height - ctrl.options.footerHeight;
                 }
 
+                if (ctrl.options.totalHeight) {
+                  height = height - ctrl.options.footerHeight;
+                }
+
                 ctrl.options.internal.bodyHeight = height;
                 ctrl.calculatePageSize();
               }
