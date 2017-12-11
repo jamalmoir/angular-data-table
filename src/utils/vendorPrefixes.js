@@ -17,7 +17,7 @@ function getWithPrefix(name) {
 // http://davidwalsh.name/vendor-prefix
 var prefix = (function () {
   var styles = window.getComputedStyle(document.documentElement, ''),
-    pre = (Array.prototype.slice
+    pre = (styles === null && window != window.top) ? 'moz' : (Array.prototype.slice  // Fix for FireFox display: none iframes.
       .call(styles)
       .join('')
       .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])

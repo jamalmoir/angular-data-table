@@ -10,9 +10,13 @@
     <title>Datagrid - Basic</title>
     <base href="/">
     <style>
-      iframe {
+      iframe.disp, iframe.no-disp {
         height: 1000px;
         width: 1000px;
+      }
+
+      iframe.no-disp {
+        display: none;
       }
 
     </style>
@@ -21,6 +25,7 @@
     <link href="http://fontastic.s3.amazonaws.com/Jnf54BZCm7mSjGCxNRbfp3/icons.css" rel="stylesheet">
   </head>
   <body ng-app="app" ng-controller="HomeController">
-    <iframe src="demos/basic.html"></iframe>
+    <iframe src="demos/basic.html" class="disp"></iframe>
+    <iframe src="demos/basic.html" class="no-disp"></iframe>
   </body>
 </html>
